@@ -1,26 +1,38 @@
-<template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
-</template>
+<script setup>
+import ChildComponent from "./components/ChildComponent.vue";
+import HelloWorld from "./components/HelloWorld.vue";
+import { ref, reactive, provide } from "vue";
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+const sharedState = reactive({
+  count: 0,
+  increment() {
+    this.count++;
+  },
+  decrement() {
+    this.count--;
+  },
+});
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+provide("sharedState", sharedState);
+
+const message = ref("Hello from Parent Component");
+
+const updateMessage = () => {
+  message.value = "Hello from Parent Component Updated";
+};
+
+provide("message", message);
+provide("updateMessage", updateMessage);
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<template>
+  <div>
+    <h1>Parent Component</h1>
+    <button @click="updateMessage">Update Message</button>
+    <ChildComponent />
+    <HelloWorld />
+    <p>Count: {{ sharedState.count }}</p>
+    <button @click="sharedState.increment">Increment</button>
+    <button @click="sharedState.decrement">Decrement</button>
+  </div>
+</template>

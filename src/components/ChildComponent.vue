@@ -1,12 +1,16 @@
 <script setup>
 import { inject } from "vue";
 
+const message = inject("message");
+const updateMessage = inject("updateMessage");
 const sharedState = inject("sharedState");
 </script>
 
 <template>
   <div>
-    <h1>Second Child Component</h1>
+    <h2>Child Component</h2>
+    <p>Message: {{ message }}</p>
+    <button @click="updateMessage">Update Message</button>
     <p>Count: {{ sharedState.count }}</p>
     <button @click="sharedState.increment">Increment</button>
     <button @click="sharedState.decrement">Decrement</button>
